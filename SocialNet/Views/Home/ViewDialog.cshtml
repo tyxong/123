@@ -1,0 +1,53 @@
+﻿@model SocialNet.Models.Dialog
+
+@{
+    <script type="text/javascript"
+            src="@Url.Content("~/Scripts/AddNewMessagesJS.js")">
+    </script>
+}
+
+<h3>@ViewBag.Title</h3>
+
+@Html.ActionLink("Обновить", "AddNewMessages", "Home", null, new { id = "actionLink" })
+<div id="AllMessages">
+    @foreach (var message in Model.Messages)
+    {
+        <div class="message" id=@message.MessageId.ToString()>
+            <div class="pull-left">
+                <div class="min-avatar">
+                    <img width="50" src="@Url.Action("GetAvatar", "Home", new { message.UserId })" />
+                </div>
+                <div class="message-text">
+                    @message.Text
+                </div>
+            </div>
+            <div class="message-time">
+                @if (message.Time.Date == DateTime.Now.Date)
+                {
+                    @message.Time.ToString("HH:mm")
+                }
+                else
+                {
+                    @message.Time.ToString("d MMM yyyy")
+                }
+            </div>
+        </div>
+    }
+    @if (Model.Messages.Count == 0)
+    {
+        string id = "-" + @Model.DialogId.ToString();
+        <div class="message" id=@id>
+        </div>
+    }
+</div>
+
+@using (Ajax.BeginForm("WriteMessage", "Home", Model, new AjaxOptions
+                                         {                                             
+                                             HttpMethod = "POST",
+                                             OnSuccess = "ClearTextArea"
+                                         }))
+{
+    <textarea rows="3" class="InputText" id="InputText" name="message" placeholder="Введите ваше сообщение"></textarea>
+    <br />
+    <button type="submit">Отправить сообщение</button>
+}

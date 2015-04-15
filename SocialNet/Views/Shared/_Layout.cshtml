@@ -1,0 +1,74 @@
+﻿@{
+    var searchString = (string)ViewBag.Search;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    <script src="~/Scripts/jquery-1.9.0.min.js"></script>
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/jquery.unobtrusive-ajax.js"></script>
+    @Styles.Render("~/Content/bootstrap.css")
+    @Scripts.Render("~/bundles/modernizr")
+</head>
+<body>
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container">
+                <ul class="nav nav-pills pull-left">
+                    <li>
+                        @using (Html.BeginForm("Search", "Home", FormMethod.Post, new { @class = "form-search" }))
+                        {
+                            <input type="text" id="InputSearchTop" name="searchString" placeholder="Поиск">
+                        }
+                    </li> 
+                </ul> 
+                <ul class="nav nav-pills pull-right">
+                    @if (Request.IsAuthenticated)
+                    {
+                        <li>
+                            @Html.ActionLink("Здравствуйте, " + User.Identity.Name + ". ", "Manage", "Account", routeValues: null, htmlAttributes: new { @class = "username", title = "Управление" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Выйти", "LogOff", "Account")
+                        </li>
+                    }
+                    else
+                    {
+                        <li>
+                            @Html.ActionLink("Регистрация", "Register", "Account", routeValues: null, htmlAttributes: new { id = "registerLink" })
+                        </li>
+                        <li>
+                            @Html.ActionLink("Выполнить вход", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="span3">
+            <div class="well sidebar-nav">
+                <ul class="nav nav-list">
+                    <li>@Html.ActionLink("Мой профиль", "Index", "Home") </li>
+                    <li>@Html.ActionLink("Мои друзья", "ViewFriends", "Home") </li>
+                    <li>@Html.ActionLink("Мои диалоги", "AllMyDialogs", "Home") </li>
+                    <li>@Html.ActionLink("Мои фотографии", "ViewPhotos", "Home") </li>
+                    <li>@Html.ActionLink("Мои новости", "AllMyNews", "Home") </li>
+                </ul>
+            </div>
+        </div>
+        <div class="span9">
+            @RenderSection("featured", required: false)
+            <div class="row-fluid">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    @Scripts.Render("~/bundles/jquery")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

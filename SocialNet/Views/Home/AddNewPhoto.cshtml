@@ -1,0 +1,24 @@
+﻿@model SocialNet.Models.Photo
+
+@{
+    ViewBag.Title = "Добавление новой фотографии";
+}
+
+@using (Html.BeginForm("AddNewPhoto", "Home",
+  FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    <fieldset>
+        <legend>Форма добавления новой фотографии</legend>
+        <div>
+            <label>Cделать фотографию аватаркой</label>
+            <p>
+                @Html.CheckBoxFor(ph => ph.IsAvatar)
+            </p>
+        </div>
+        <div>
+            <label>Загрузить фотографию:</label>
+                <input type="file" name="Image" />
+        </div>
+        <input type="submit" value="Сохранить" />
+    </fieldset>
+}

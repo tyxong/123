@@ -1,0 +1,28 @@
+﻿@model List<SocialNet.Models.WallPost>
+
+@{
+    <script type="text/javascript"
+            src="@Url.Content("~/Scripts/JSForUserProfilePage.js")">
+    </script>
+}
+
+<div id="AllMessages">
+    @foreach (var post in Model)
+    {
+        @Html.Partial("_PostPartial", post);
+    }
+    @if (ViewBag.NotAllPosts)
+    {
+        <div class="block-link1">
+            @Ajax.ActionLink("Показать больше постов", "ViewMorePosts", "Home", Model.Last(),
+                                     new AjaxOptions
+                                     {
+                                         UpdateTargetId = "AllMessages",
+                                         InsertionMode = InsertionMode.Replace,
+                                         HttpMethod = "Get"
+                                     })
+        </div>
+    }
+</div>
+
+

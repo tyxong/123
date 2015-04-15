@@ -1,0 +1,26 @@
+﻿@model List<SocialNet.Models.Message>
+
+@foreach (var message in Model)
+{
+    <div id=@message.MessageId.ToString() class="message">
+        <div class="pull-left">
+            <div class="min-avatar">
+                <img width="50" src="@Url.Action("GetAvatar", "Home", new { message.UserId })" />
+            </div>
+            <div class="message-text">
+                @message.Text
+            </div>
+        </div>
+        <div class="message-time">
+            @if (message.Time.Date == DateTime.Now.Date)
+            {
+                @message.Time.ToString("hh:mm")
+            }
+            else
+            {
+                @message.Time.ToString("d MMM yyyy")
+            }
+        </div>
+    </div>
+}
+

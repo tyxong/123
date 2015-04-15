@@ -1,0 +1,162 @@
+﻿@model SocialNet.Models.UserProfile
+
+@{
+    ViewBag.Title = "Мой профиль";
+    <script type="text/javascript"
+            src="@Url.Content("~/Scripts/common.js")">
+    </script>
+}
+
+<div id="TopLineAtUserProfilePage">
+    <div id="TopLineUserName">
+        @Model.UserName - мой профиль
+    </div>
+    <div id="TopLineLastVisit">
+        Online  
+    </div>
+</div>
+
+<div class="pull-left">
+    <div id="Avatar">
+        <img src="@Url.Action("GetAvatar", "Home", new { Model.UserId })" />
+    </div>
+
+    <div id="ChangeMyInfo">
+        <a href="@Url.Action("FillInFields", "Account")"><button class="button-for-user-info">Изменить мои данные</button></a>
+    </div>
+
+    @if (Model.Friends.Count > 0)
+    {
+        <div class="new-section-link">
+            Мои друзья: @Model.Friends.Count
+            @Html.ActionLink("Все", "ViewFriends", "Home", null, new { @class = "linkForJS" })
+        </div>
+        <div class="div-of-friends">
+            @for (int i = 0; i < @Model.Friends.Count; i++)
+            {
+                <div class="min-avatar">
+                    <a href="@Url.Action("UserProfile", "Home", @Model.Friends.ElementAtOrDefault(i), null)"><img width="50" src="@Url.Action("GetAvatar", "Home", new { @Model.Friends.ElementAtOrDefault(i).UserId })" /></a>
+                </div>
+                if (i == 2)
+                {
+                    break;
+                }
+            }
+        </div>
+        if (Model.Friends.Count > 3)
+        {
+            <div class="div-of-friends">
+                @for (int i = 3; i < @Model.Friends.Count; i++)
+                {
+                    <div class="min-avatar">
+                        <a href="@Url.Action("UserProfile", "Home", @Model.Friends.ElementAtOrDefault(i), null)"><img width="50" src="@Url.Action("GetAvatar", "Home", new { @Model.Friends.ElementAtOrDefault(i).UserId })" /></a>
+                    </div>
+                    if (i == 5)
+                    {
+                        break;
+                    }
+                }
+            </div>
+        }
+    } 
+
+    @if (Model.OnlineFriends.Count > 0)
+    {
+        <div class="new-section-link">
+            Мои друзья онлайн: @Model.OnlineFriends.Count
+            @Html.ActionLink("Все", "ViewOnlineFriends", "Home", null, new { @class = "linkForJS" })
+        </div>
+        <div class="div-of-friends">
+            @for (int i = 0; i < @Model.OnlineFriends.Count; i++)
+            {
+                <div class="min-avatar">
+                    <a href="@Url.Action("UserProfile", "Home", @Model.OnlineFriends.ElementAtOrDefault(i), null)"><img width="50" src="@Url.Action("GetAvatar", "Home", new { @Model.OnlineFriends.ElementAtOrDefault(i).UserId })" /></a>
+                </div>
+                if (i == 2)
+                {
+                    <br />
+                }
+                if (i == 5)
+                {
+                    break;
+                }
+            }
+        </div>
+    }
+</div>
+
+<div class="pull-to-right">
+    <div id="InfoAboutUser">
+        <div class="new-section">Контактная информация:</div> 
+        @if (Model.CurrentCity != null)
+        {
+            <div>
+                Текущий город: @Model.CurrentCity
+            </div>
+        }
+        @if (Model.Adress != null)
+        {
+            <div>
+                Адрес: @Model.Adress
+            </div>
+        }
+        @if (Model.Mobile != null)
+        {
+            <div>
+                Мобильный телефон: @Model.Mobile
+            </div>
+        }
+        @if (Model.RelationShip != null)
+        {
+            <div>
+                Семейное положение: @Model.RelationShip
+            </div>
+        }         
+        @if ((Model.CurrentCity == null) && (Model.RelationShip == null) && (Model.Mobile == null) && (Model.Adress != null))
+        {
+            <div>
+                Контактная информация отсутсвует
+            </div>
+        }
+    </div>
+
+    <div class="new-section-link">
+        Мои фотографии:
+        @Html.ActionLink("Все", "ViewPhotos", "Home", null, new { @class = "linkForJS" })
+        <div class="pull-right">
+            @Html.ActionLink("Добавить фотографию", "AddNewPhoto", "Home")
+        </div>
+    </div> 
+    @if (Model.Photos.Count != 0)
+    { 
+        <div id="SectionOfPhotos">
+            @for (int i = 0; i < Model.Photos.Count; i++)
+            {
+                SocialNet.Models.Photo photo = Model.Photos.ElementAtOrDefault(i);
+                <div class="photo-in-section">
+                    <a href="@Url.Action("ViewPhotos", "Home", new { photo.PhotoId })"><img width="120" src="@Url.Action("GetPhoto", "Home", new { photo.PhotoId })" /></a>
+                </div>
+                if (i == 2)
+                {
+                    break;
+                }
+            }
+        </div>
+    }
+    
+    <div class="new-section">Всего записей: @Model.WallPosts.Count </div>
+    @using (Ajax.BeginForm("WriteWallPost", "Home", Model, new AjaxOptions
+                                    {
+                                        UpdateTargetId = "AllMessages",
+                                        InsertionMode = InsertionMode.Replace,
+                                        HttpMethod = "POST",
+                                        OnSuccess = "ClearTextArea"
+                                    }))
+    {
+        <textarea rows="2" class="InputText" name="post" placeholder="Введите ваш текст"></textarea><br />
+        <input type="submit" id="Button_Add_New_Post" value="Добавить запись" />
+    }
+    @{ Html.RenderAction("RenderWall", "Home", Model); }
+</div>
+
+

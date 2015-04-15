@@ -1,0 +1,35 @@
+﻿@model SocialNet.Models.User
+
+@{
+    ViewBag.Title = "Заполнение данных";
+}
+
+<h4 class="title">Заполните поля своими данными</h4>
+<form method="post">
+    <fieldset>
+        <legend>Форма заполнения данных</legend>
+        <div>
+            <label>Текущий город</label>
+            <input type="text" value="@Model.CurrentCity" name="CurrentCity" />
+        </div>
+        <div>
+            <label>Текущий адрес</label>
+            <input type="text" value="@Model.Adress" name="Adress" />
+        </div>
+        <div>
+            <label>Мобильный телефон</label>
+            <input type="tel" value="@Model.Mobile" name="Mobile" />
+        </div>
+        <div>
+            <label>Семейное положение</label>
+            <input type="text" value="@Model.RelationShip" name="RelationShip" />
+        </div>
+        <button type="submit">Сохранить</button>
+        <div>
+            @Html.ActionLink("Изменить пароль","Manage","Account")
+        </div>
+        <div>
+            @Html.ActionLink("Загрузить фотографию", "AddNewPhoto", "Home")
+        </div>
+    </fieldset>
+</form>

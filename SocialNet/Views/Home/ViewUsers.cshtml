@@ -1,0 +1,102 @@
+﻿@model List<SocialNet.Models.UserProfile>
+
+@{
+    <script src="~/Scripts/AddRemoveFriend.js"></script>
+}
+
+@if (Model.Count == 0)
+{
+    <h4>Список пользователей пуст</h4>
+}
+else
+{
+    <input type="text" id="searchUsers" placeholder="Начните вводить имя пользователя">
+    foreach (var user in Model)
+    {
+        if (user.UserId != WebSecurity.CurrentUserId)
+        {
+            <div class="min-user" id=@user.UserName>
+                <div class="photo-in-section">
+                    <img width="120" src="@Url.Action("GetAvatar", "Home", new { user.UserId })" />
+                </div>
+                <div class="info-about-user-min">         
+                    <div class="pull-left">
+                        <div class="name">
+                            @Html.ActionLink(@user.UserName, "UserProfile", "Home", @user, null)
+                        </div>
+                        <div class="is-online">
+                            @if (user.IsOnline)
+                            {
+                                <text>Online</text>
+                            }
+                        </div>
+                        <div class="city-and-mobile">
+                            @user.CurrentCity
+                        </div>
+                        <div class="city-and-mobile">
+                            @user.Mobile
+                        </div>
+                    </div>
+                    <div class="pull-left"> 
+                        @if (user.IsFriend)
+                        {
+                            <form action="RemoveFriend" class="AddRemoveFriendFormJS">
+                                <input type="hidden" name="friendId" value="@user.UserId" />
+                                <button type="submit" class="button-for-user-info">Убрать из друзей</button>
+                            </form>
+                            <form action="AddFriend" class="AddRemoveFriendFormJS" style="display:none">
+                                <input type="hidden" name="newFriendId" value="@user.UserId" />
+                                <button type="submit" class="button-for-user-info">Добавить в друзья</button>
+                            </form>
+                        }
+                        else
+                        {
+                            <form action="AddFriend" class="AddRemoveFriendFormJS">
+                                <input type="hidden" name="newFriendId" value="@user.UserId" />
+                                <button type="submit" class="button-for-user-info">Добавить в друзья</button>
+                            </form>
+                            <form action="RemoveFriend" class="AddRemoveFriendFormJS" style="display:none">
+                                <input type="hidden" name="friendId" value="@user.UserId" />
+                                <button type="submit" class="button-for-user-info">Убрать из друзей</button>
+                            </form>
+                        }
+                        <br />
+                        <a href="@Url.Action("ViewDialog", "Home", new { user.UserId })"><button id="Write_Message" class="button-for-user-info">Написать сообщение</button></a>
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+        else
+        {
+            <div class="min-user" id=@user.UserName>
+                <div class="photo-in-section">
+                    <img width="120" src="@Url.Action("GetAvatar", "Home", new { user.UserId })" />
+                </div>
+                <div class="info-about-user-min">
+                    <div class="pull-left">
+                        <div class="name">
+                            @Html.ActionLink(@user.UserName, "UserProfile", "Home", @user, null)
+                        </div>
+                        <div class="is-online">
+                            @if (user.IsOnline)
+                            {
+                                <text>Online</text>
+                            }
+                        </div>
+                        <div class="city-and-mobile">
+                            @user.CurrentCity
+                        </div>
+                        <div class="city-and-mobile">
+                            @user.Mobile
+                        </div>
+                    </div>
+                    <div class="pull-left">
+
+                    </div>
+                </div>
+            </div>
+            <hr />
+        }
+    }
+}

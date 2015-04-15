@@ -1,0 +1,72 @@
+﻿@model SocialNet.Models.WallPost
+<div>
+    <div class="min-post">
+        <div class="min-avatar">
+            <img width="50" src="@Url.Action("GetAvatar", "Home", new { Model.UserId })" />
+        </div>
+
+        <div class="pull-right">
+            <div class="min-name">
+                @Html.ActionLink(@Model.User.UserName, "UserProfile", "Home", @Model.User, null)
+            </div>
+
+            <div id="DeleteWallpost">
+                @if (WebSecurity.CurrentUserId == Model.UserId)
+                {
+                  @Html.ActionLink("delete", "DeleteWallPost", "Home", Model, new { @class = "deleteLink" })
+                }
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="min-text">
+                @Model.Text
+            </div>
+        </div>
+        <div class="pull-right">
+            <div class="date">
+                @Model.Date.Date.ToString("d MMM yyyy")
+            </div>
+            <div class="min-rating">
+                @Html.ActionLink("Like", "IncRating", "Home", Model, new { @class = "RatingLink" })
+                @Model.Rating
+                @Html.ActionLink("Disike", "DecRating", "Home", Model, new { @class = "RatingLink" })
+            </div>
+        </div>
+    </div>
+    @if (Model.Comments.Count != 0)
+    {
+        <div class="block-link">
+            <p>Показать комментарии</p>
+            <p style="display:none">Скрыть комментарии</p>
+        </div>
+    }
+
+    <div class="AllComments">
+        @foreach (var comment in Model.Comments)
+        {
+            <div class="comment">
+                <div class="avatar-for-comment">
+                    <img width="30" src="@Url.Action("GetAvatar", "Home", new { comment.UserId })" />
+                </div>
+                <div class="username-for-comment">
+                    @Html.ActionLink(@comment.User.UserName, "UserProfile", "Home", @comment.User, null)
+                </div>
+                <div class="text-for-comment">
+                    @comment.TextOfComment
+                </div>
+                <div class="date-for-comment">
+                    @comment.DateOfComment.Date.ToString("d MMM yyyy")
+                </div>
+                <hr />
+            </div>
+        }
+    </div>
+    <div id="InputComment">
+        @using (Html.BeginForm("AddComment", "Home", Model, FormMethod.Post, new { @class = "commentForm" }))
+        {
+            <textarea rows="1" class="comment" name="comment" placeholder="Введите ваш текст"></textarea><br />
+            <input type="submit" value="Добавить комментарий" />
+        }
+    </div>
+</div>
+<hr />

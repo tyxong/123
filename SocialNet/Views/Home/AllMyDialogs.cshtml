@@ -1,0 +1,44 @@
+﻿@model List<SocialNet.Models.Dialog>
+
+@{
+    ViewBag.Title = "Мои диалоги";
+    <script type="text/javascript"
+            src="@Url.Content("~/Scripts/JSForDialog.js")">
+    </script>
+}
+
+<h3>Мои диалоги</h3>
+
+@foreach (var dialog in Model)
+{
+    <div class="dialog">
+        @foreach (var user in dialog.Users)
+        {
+            if (user.UserName != WebSecurity.CurrentUserName)
+            {
+                @Html.ActionLink("Посмотреть диалог", "ViewDialog", "Home", new SocialNet.Models.UserProfile { UserId = user.UserId }, new { @class = "linkForJS"})
+                <div class="min-avatar">
+                    <img width="50" src="@Url.Action("GetAvatar", "Home", new { user.UserId })" />
+                </div>
+            
+                <div class="dialog-name-and-time">
+                    @Html.ActionLink(user.UserName, "UserProfile", "Home", new SocialNet.Models.User { UserId = user.UserId }, null)
+                    <br />
+                    @dialog.Messages.Last().Time.ToString("d MMM yyyy")
+                </div>
+            }
+        }
+        <div class="last-message">
+            @if (dialog.Messages.Last().UserId == WebSecurity.CurrentUserId)
+            {
+                <div class="min-avatar">
+                    <img width="50" src="@Url.Action("GetAvatar", "Home", new { dialog.Messages.Last().UserId })" />
+                </div>
+            }  
+            <div class="last-message-text">
+                @dialog.Messages.Last().Text
+            </div>
+        </div>
+    </div>
+    <hr />
+}

@@ -1,0 +1,17 @@
+﻿@model SocialNet.Models.Comment
+
+<div class="comment">
+    <div class="avatar-for-comment">
+        <img width="30" src="@Url.Action("GetAvatar", "Home", new { Model.UserId })" />
+    </div>
+    <div class="username-for-comment">
+        @Html.ActionLink(Model.User.UserName, "UserProfile", "Home", Model.User, null)
+    </div>
+    <div class="text-for-comment">
+        @Model.TextOfComment
+    </div>
+    <div class="date-for-comment">
+        @Model.DateOfComment.Date.ToString("d MMM yyyy")
+    </div>
+    <hr />
+</div>

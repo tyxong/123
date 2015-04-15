@@ -1,0 +1,36 @@
+﻿@model List<SocialNet.Models.Photo>
+
+@{
+    ViewBag.Title = "Фотографии";
+    <script type="text/javascript"
+            src="@Url.Content("~/Scripts/JSForViewPhoto.js")">
+    </script>
+}
+
+<h3>Все фотографии пользователя @Model.FirstOrDefault().User.UserName</h3>
+@if (ViewBag.PhotoToView == -1)
+{
+    <div id="image">
+        <img src="@Url.Action("GetPhoto", "Home", new { Model.FirstOrDefault().PhotoId })" />
+    </div>
+}
+else
+{
+    foreach(var photo in Model)
+    {
+        if (photo.PhotoId == ViewBag.PhotoToView)
+        { 
+            <div id="image">
+                <img src="@Url.Action("GetPhoto", "Home", new { photo.PhotoId })" />
+            </div>
+        }
+    }
+}
+<div id="Photos">
+    @foreach (var photo in Model)
+    {
+        <div class="small-photo">
+            <a rel="@Url.Action("GetPhoto", "Home", new { photo.PhotoId })" href="" class="image"><img src="@Url.Action("GetPhoto", "Home", new { photo.PhotoId })" class="thumbnail" /></a>
+        </div>
+    }
+</div>
